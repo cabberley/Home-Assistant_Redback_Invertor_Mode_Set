@@ -3,7 +3,7 @@ import requests
 
 @pyscript_executor
 
-def setInverterMode1(rbEmail, rbPassword, rbSerialNumber,  rbInverterMode,  rbInverterPower, rbRossVersion):
+def setInverterMode(rbEmail, rbPassword, rbSerialNumber,  rbInverterMode,  rbInverterPower, rbRossVersion):
     loginUrl = "https://portal.redbacktech.com/Account/Login"
     configureurl = 'https://portal.redbacktech.com/productcontrol/Configure?serialNumber=' + rbSerialNumber
     inverterSetUrl = 'https://portal.redbacktech.com/productcontrol/Index'
