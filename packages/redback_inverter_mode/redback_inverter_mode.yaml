@@ -10,8 +10,8 @@ input_number:
     step: 100
     mode: box
 input_select:
-  redback_inverter_mode_Setting:
-    name: 'Redback Inverter Mode Select'
+  redback_inverter_mode_setting:
+    name: Redback Inverter Mode Select
     options:
       - Auto
       - Charge Battery
@@ -26,16 +26,17 @@ input_button:
     name: 'Redback Inverter Mode Set'
     icon: mdi:solar-power-variant
 script:
-  alias: Redback Inverter Mode Update
-  sequence:
-    - service: pyscript.set_invertor_mode
-      data:
-        email: secret
-        password: secret
-        serialNumber: "{{ state_attr( \"sensor.redback_inverter_status\",\"serial_number\") }}"
-        swVersion: "{{ state_attr( \"sensor.redback_inverter_status\",\"software_version\") }}"
-        inverterMode: "{{ states( \"input_select.redback_inverter_mode_Setting\") | replace(\" \",\"\") }}"
-        inverterPower: "{{ states( \"input_number.redback_inverter_power_setting_w\") | int }}"
-  mode: queued
-  max: 2
-  
+  redback_inverter_mode_update:
+    alias: Redback Inverter Mode Update
+    sequence:
+      - service: pyscript.set_invertor_mode
+        data:
+          email: secret
+          password: secret
+          serialNumber: "{{ state_attr( \"sensor.redback_inverter_status\",\"serial_number\") }}"
+          swVersion: "{{ state_attr( \"sensor.redback_inverter_status\",\"software_version\") }}"
+          inverterMode: "{{ states( \"input_select.redback_inverter_mode_Setting\") | replace(\" \",\"\") }}"
+          inverterPower: "{{ states( \"input_number.redback_inverter_power_setting_w\") | int }}"
+    mode: queued
+    max: 2
+    
