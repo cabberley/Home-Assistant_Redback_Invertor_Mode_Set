@@ -1,4 +1,4 @@
-import redbackfunction
+import redback_function
 
 @service
 def set_invertor_mode(email,password, serialNumber, inverterMode, inverterPower, swVersion):
