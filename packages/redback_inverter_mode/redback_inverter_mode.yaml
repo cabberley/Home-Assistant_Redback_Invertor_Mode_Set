@@ -1,0 +1,41 @@
+#Create entities to setup Redback Inverter mode
+input_number:
+  redback_inverter_power_setting_w:
+    name: 'Redback Inverter Power Set Watts'
+    unit_of_measurement: W
+    icon: mdi:home-lightning-bolt-outline
+    initial: 0
+    min: 0
+    max: 10000
+    step: 100
+    mode: box
+input_select:
+  redback_inverter_mode_Setting:
+    name: 'Redback Inverter Mode Select'
+    options:
+      - Auto
+      - Charge Battery
+      - Discharge Battery
+      - Import Power
+      - Export Power
+      - Conserve
+    initial: Auto
+    icon: mdi:transmission-tower
+input_button:
+  redback_inverter_set_mode:
+    name: 'Redback Inverter Mode Set'
+    icon: mdi:solar-power-variant
+script:
+  alias: Redback Inverter Mode Update
+  sequence:
+    - service: pyscript.set_invertor_mode
+      data:
+        email: secret
+        password: secret
+        serialNumber: "{{ state_attr( \"sensor.redback_inverter_status\",\"serial_number\") }}"
+        swVersion: "{{ state_attr( \"sensor.redback_inverter_status\",\"software_version\") }}"
+        inverterMode: "{{ states( \"input_select.redback_inverter_mode_Setting\") | replace(\" \",\"\") }}"
+        inverterPower: "{{ states( \"input_number.redback_inverter_power_setting_w\") | int }}"
+  mode: queued
+  max: 2
+  
