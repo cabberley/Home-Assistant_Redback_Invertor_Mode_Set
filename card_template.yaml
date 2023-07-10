@@ -10,8 +10,8 @@ cards:
         secondary_info: last-updated
   - type: entities
     entities:
-      - entity: input_select.inverter_mode_select
-      - entity: input_number.inverter_power_w
+      - entity: input_select.redback_inverter_mode_setting
+      - entity: input_number.redback_inverter_power_setting_w
         icon: mdi:transmission-tower
   - type: custom:card-templater
     entities:
@@ -20,6 +20,6 @@ cards:
       type: button
       tap_action:
         action: call-service
-        service: script.redback_update_inverter_mode
+        service: script.redback_inverter_mode_update
       icon: mdi:button-pointer
       icon_height: 25px
