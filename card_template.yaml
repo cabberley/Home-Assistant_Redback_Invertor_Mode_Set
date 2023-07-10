@@ -1,0 +1,25 @@
+type: custom:layout-card
+layout: vertical
+cards:
+  - type: entities
+    entities:
+      - entity: sensor.redback_inverter_mode
+        icon: mdi:solar-power-variant
+        secondary_info: last-updated
+      - entity: sensor.redback_inverter_power_setpoint
+        secondary_info: last-updated
+  - type: entities
+    entities:
+      - entity: input_select.inverter_mode_select
+      - entity: input_number.inverter_power_w
+        icon: mdi:transmission-tower
+  - type: custom:card-templater
+    entities:
+      - input_button.redback_set_inverter_mode
+    card:
+      type: button
+      tap_action:
+        action: call-service
+        service: script.redback_update_inverter_mode
+      icon: mdi:button-pointer
+      icon_height: 25px
