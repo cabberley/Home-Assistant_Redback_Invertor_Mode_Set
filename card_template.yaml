@@ -1,25 +1,23 @@
-type: custom:layout-card
-layout: vertical
+type: custom:collapsable-cards
+title: Set Redback Inverter Mode
 cards:
-  - type: entities
-    entities:
-      - entity: sensor.redback_inverter_mode
-        icon: mdi:solar-power-variant
-        secondary_info: last-updated
-      - entity: sensor.redback_inverter_power_setpoint
-        secondary_info: last-updated
-  - type: entities
-    entities:
-      - entity: input_select.redback_inverter_mode_setting
-      - entity: input_number.redback_inverter_power_setting_w
-        icon: mdi:transmission-tower
-  - type: custom:card-templater
-    entities:
-      - input_button.redback_set_inverter_mode
-    card:
-      type: button
-      tap_action:
-        action: call-service
-        service: script.redback_inverter_mode_update
-      icon: mdi:button-pointer
-      icon_height: 25px
+  - type: custom:layout-card
+    layout: vertical
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.redback_inverter_mode
+            icon: mdi:solar-power-variant
+            secondary_info: last-updated
+          - entity: sensor.redback_inverter_power_setpoint
+            secondary_info: last-updated
+      - type: entities
+        entities:
+          - entity: input_select.redback_inverter_mode_setting
+          - entity: input_number.redback_inverter_power_setting_w
+            name: Set Power
+          - entity: input_number.redback_inverter_duration
+            name: Set Duration
+          - entity: script.redback_inverter_mode_update
+            icon: mdi:upload
+            name: Update Redback Inverter
