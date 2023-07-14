@@ -9,6 +9,22 @@ input_number:
     max: 10000
     step: 100
     mode: box
+  redback_inverter_duration:
+    name: 'Redback Inverter Power Duration'
+    unit_of_measurement: mins
+    icon: mdi:timer
+    initial: 0
+    min: 0
+    max: 600
+    step: 1
+    mode: box
+input_datetime:
+  redback_inverter_reset_date_time:
+    name: 'Redback Inverter Power Reset Date Time'
+    has_date: true
+    has_time: true
+    icon: mdi:clock-digital
+    #initial: '00:00:00'
 input_select:
   redback_inverter_mode_setting:
     name: Redback Inverter Mode Select
@@ -37,6 +53,39 @@ script:
           swVersion: "{{ state_attr( \"sensor.redback_inverter_status\",\"software_version\") }}"
           inverterMode: "{{ states( \"input_select.redback_inverter_mode_Setting\") | replace(\" \",\"\") }}"
           inverterPower: "{{ states( \"input_number.redback_inverter_power_setting_w\") | int }}"
+      - if:
+          - condition: numeric_state
+            entity_id: input_number.redback_inverter_duration
+            above: 2.9
+        then:
+          - service: input_datetime.set_datetime
+            data: 
+              datetime: >-
+                {{ (now() + timedelta(minutes=(states('input_number.redback_inverter_duration') | int) ) ).strftime('%Y-%m-%d %H:%M:%S') }}
+            target:
+              entity_id: input_datetime.redback_inverter_reset_date_time   
     mode: queued
     max: 2
-    
+  redback_inverter_mode_reset_to_auto:
+    alias: Redback Inverter Mode Reset to Auto
+    sequence:
+      - service: pyscript.set_invertor_mode
+        data:
+          email: secret
+          password: secret
+          serialNumber: "{{ state_attr( \"sensor.redback_inverter_status\",\"serial_number\") }}"
+          swVersion: "{{ state_attr( \"sensor.redback_inverter_status\",\"software_version\") }}"
+          inverterMode: Auto
+          inverterPower: 0
+automation:
+  - id: 'redback_reset_inverter_to_auto'
+    alias: 'Redback Reset Inverter to Auto'
+    description: "reset Redback Invertor to Auto at the end of the requested period"
+    mode: single
+    trigger:
+      - platform: time
+        at: input_datetime.redback_inverter_reset_date_time 
+    condition: []
+    action:
+      - service: script.redback_inverter_mode_reset_to_auto
+        data: {}
